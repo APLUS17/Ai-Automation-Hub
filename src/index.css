@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer utilities {
+  .btn-primary {
+    @apply bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2 text-sm select-none shadow-md shadow-indigo-500/10 cursor-pointer active:scale-95 focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none;
+  }
+  .btn-secondary {
+    @apply bg-neutral-100 hover:bg-neutral-200 border border-neutral-300 text-neutral-800 hover:text-neutral-950 font-bold px-5 py-2.5 rounded-xl transition-all duration-200 inline-flex items-center justify-center gap-2 text-sm select-none cursor-pointer active:scale-95 focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none
+           dark:bg-zinc-900/60 dark:hover:bg-zinc-800 dark:border-zinc-800/80 dark:text-zinc-200 dark:hover:text-white;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

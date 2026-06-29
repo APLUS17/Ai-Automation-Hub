@@ -1364,36 +1364,50 @@ const WORKFLOWS_DATA = [
     "python_tools": "- `apify_runner.py` \u2014 for local testing / one-off scrapes\n- `firecrawl_scraper.py` \u2014 batch enrichment outside n8n\n- `google_sheets.py` \u2014 push results directly if n8n flow is skipped",
     "code_app": "Build `workflows/hvac/lead_review_dashboard.html`:\n- Table of leads from Google Sheet (via n8n webhook that reads sheet)\n- Filter by rating, city, date scraped\n- \"Mark contacted\" button that updates sheet row status\n- Export CSV button",
     "test_plan": "1. Run `python tools/apify_runner.py google-maps --query \"HVAC company 90210\" --max 5`\n2. Verify 5 records returned with name, phone, address, website\n3. Run `python tools/firecrawl_scraper.py contacts --url <one_website>`\n4. Verify email/phone extracted\n5. Trigger n8n workflow \u2014 check Google Sheet for new rows after run",
-    "problem_subheader": "HVAC contractors struggle to maintain a full project pipeline",
-    "problem_description": "Scraping commercial directories and checking if local businesses need service contracts is a manual chore that most field technicians and busy owners ignore, letting leads grow cold.",
+    "problem_subheader": "Homeowners submit to 5–8 HVAC companies at once — first to respond wins the job",
+    "problem_description": "When homeowners need HVAC work, they Google and submit to multiple companies simultaneously. The first to respond AND triage urgency wins the $6,000–$12,000 job. Most HVAC owners don't see new leads until 8 AM the next day — 14 hours too late. This workflow scrapes, enriches, and surfaces the highest-value prospects before competitors even see them.",
     "reddit_title": "HVAC Hacks - Best way to build a commercial lead list?",
     "reddit_comments": "21 comments",
     "metrics": [
       {
-        "label": "HVAC Contractors",
+        "label": "HVAC Contractors (US)",
         "value": "115K"
       },
       {
-        "label": "Scrape Target Size",
-        "value": "500/city"
+        "label": "Avg Job Value",
+        "value": "$6K–$12K"
       },
       {
-        "label": "GTM Lead Lift",
-        "value": "+35%"
+        "label": "Lead Response Window",
+        "value": "<1 hour"
       }
     ],
+    "lead_sources": [
+      "Allied Construction Industries (ACI) — 500 member HVAC companies",
+      "West Chester-Liberty Chamber Alliance",
+      "Mason Deerfield Chamber",
+      "Cincinnati Home Builders Association",
+      "Angi/HomeAdvisor HVAC contractor network"
+    ],
+    "warm_partners": [
+      "Web agencies with HVAC clients (Skynet Technologies, Helium SEO, Magnet Co)",
+      "IT firms serving HVAC (IT GOAT, Ingage Partners, LayerCake Technologies)",
+      "Property management companies",
+      "Real estate agents in target metro"
+    ],
+    "positioning": "Our AI Sorts Your Leads in 60 Seconds: Emergencies Get a Tech Dispatched Immediately, Estimates Get Qualified and Scheduled, No Lead Falls Through the Cracks.",
     "gtm": [
       {
-        "channel": "Local Contractor Meetups",
-        "desc": "Present lead generation strategies to local business networking groups and chambers."
+        "channel": "Google LSA + Facebook Lead Ads",
+        "desc": "This system makes those ad dollars convert — pitch it to contractors already running paid ads who are losing leads to slow follow-up."
       },
       {
-        "channel": "HVAC Contractor Forums",
-        "desc": "Post step-by-step guides showing how to scrape and enrich business data on sites like HVAC-Talk."
+        "channel": "HVAC Contractor Forums (HVAC-Talk)",
+        "desc": "Post case studies showing lead response time improvements. Link to a free audit offer."
       },
       {
-        "channel": "GLS Optimization Audits",
-        "desc": "Offer free localized maps audit reports to HVAC firms to sell the enrichment services."
+        "channel": "Real Estate Agent Referrals",
+        "desc": "Partner with agents in Mason/West Chester/Blue Ash who refer homeowners needing pre-sale HVAC inspections."
       }
     ]
   },
@@ -1448,36 +1462,49 @@ const WORKFLOWS_DATA = [
     "python_tools": "- `twilio_sms.py` \u2014 for testing SMS delivery\n- `google_sheets.py` \u2014 loading/updating lead list outside n8n",
     "code_app": "Not required. Optional: a simple call analytics dashboard showing call outcomes by day.",
     "test_plan": "1. Add one test lead row to Google Sheet with your own phone number\n2. Trigger n8n manually \u2014 should receive a Bland.ai call within 30 seconds\n3. Say \"yes I'm interested\" \u2014 verify Twilio SMS arrives with booking link\n4. Check Google Sheet \u2014 row should show Status = \"Interested\"",
-    "problem_subheader": "Field-busy HVAC owners miss phone calls and lose clients",
-    "problem_description": "When homeowners need urgent repairs, they call the first HVAC firm on Google. If the owner is out on a roof repairing a compressor, the call goes to voicemail and the lead is lost to a competitor.",
+    "problem_subheader": "An 8-truck operation gets 80+ calls in 48 hours during a heat wave — half go to voicemail",
+    "problem_description": "HVAC companies lose 40–60% of potential revenue during seasonal demand spikes. A database of 2,400 past customers who'd book preventive maintenance sits untouched — because no one has time to call them. This workflow monitors weather forecasts, auto-triggers proactive outreach before the spike hits, and books directly into ServiceTitan without any manual dialing.",
     "reddit_title": "HVAC Hacks - Answer rate and dispatch solutions?",
     "reddit_comments": "67 comments",
     "metrics": [
       {
-        "label": "Missed Call Loss",
-        "value": "$400/ea"
+        "label": "Revenue Lost Per Spike",
+        "value": "40–60%"
       },
       {
-        "label": "Outreach Call Speed",
-        "value": "<2 mins"
+        "label": "Calls During Heat Wave",
+        "value": "80+/48hrs"
       },
       {
-        "label": "SMS Conversion Lift",
-        "value": "+25%"
+        "label": "Past Customer DB (avg)",
+        "value": "2,400 leads"
       }
     ],
+    "lead_sources": [
+      "Past customer CRM (systems 10+ years old, serviced in last 2 seasons)",
+      "OpenWeather API — Cincinnati ZIPs (45069, 45040, 45246) temp triggers",
+      "Google Local Services Ads inbound leads",
+      "Community Facebook groups (West Chester Community Board, Mason Moms, Fairfield Neighbors)"
+    ],
+    "warm_partners": [
+      "Property management companies (Springdale apts, downtown Cincinnati condos)",
+      "Home inspection companies serving Butler/Warren/Hamilton Counties",
+      "Plumbing companies (non-competing cross-referral)",
+      "Local insurance agents (State Farm, Allstate in Mason/West Chester)"
+    ],
+    "positioning": "Never Miss Another Emergency Call: Our AI Voice Bot answers every call in 30 seconds, qualifies the job, and books your technicians automatically — even at 11 PM.",
     "gtm": [
       {
-        "channel": "Bland.ai/Synthflow Showcase",
-        "desc": "Build demo voice bots for specific contractors and email them a recording of their voice assistant."
+        "channel": "Demo Voice Bot Cold Email",
+        "desc": "Record a live demo call for a specific contractor's business and email it to them — hearing their own company name from the bot closes deals fast."
+      },
+      {
+        "channel": "Local HVAC Associations (ACI, Cincinnati HBA)",
+        "desc": "Host webinars showing how weather-triggered outreach fills the calendar before peak season hits."
       },
       {
         "channel": "Contractor Marketing Agencies",
-        "desc": "Partner with agencies doing SEO/PPC for trade companies to offer voice automation integrations."
-      },
-      {
-        "channel": "Local HVAC Associations",
-        "desc": "Host virtual webinars showing how voice AI handles booking and dispatching after-hours."
+        "desc": "Partner with SEO/PPC agencies already serving trade companies — offer voice AI as an add-on to their existing packages."
       }
     ]
   },

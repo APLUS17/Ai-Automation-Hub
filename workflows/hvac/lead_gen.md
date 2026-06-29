@@ -1,7 +1,9 @@
-# HVAC — Lead Gen (Google Maps Scrape → Enrichment → Sheet + Dashboard)
+# HVAC — Lead Gen & Inbound Triage (Scrape + Enrich → Sheet + Urgency Response)
 
 ## What It Does
-Scrapes Google Maps for HVAC businesses in target zip codes using Apify, enriches results with contact data via Firecrawl, deduplicates, and pushes a clean lead list to Google Sheets. A simple Claude Code dashboard lets you review and filter leads.
+Two-part workflow: (1) Scrapes Google Maps for HVAC prospects in target zip codes using Apify, enriches with contact data via Firecrawl, deduplicates, and pushes to Google Sheets. (2) When inbound leads arrive (Google LSA, Facebook, web form), Claude classifies urgency 1–10 and routes instantly — emergencies get a tech SMS'd within 60 seconds, estimates get auto-scheduled, routine inquiries enter the CRM pipeline.
+
+**Market context**: Homeowners submit to 5–8 HVAC companies simultaneously. The first to respond wins the $6,000–$12,000 job. Most HVAC owners don't see new leads until 8 AM — 14 hours too late.
 
 ## Integrations Required
 - `APIFY_API_TOKEN` (Google Maps scraper)
@@ -43,8 +45,27 @@ Scrapes Google Maps for HVAC businesses in target zip codes using Apify, enriche
 9. **Google Sheets: Append Leads** (`n8n-nodes-base.googleSheets`)
    - Append columns: [Business Name, Phone, Email, Address, Website, Google Rating, Review Count, Source Query, Date Scraped]
 
+--- (Part 2: Inbound Lead Triage — separate n8n workflow) ---
+
+10. **Webhook Trigger** (`n8n-nodes-base.webhook`)
+    - Receives leads from Google LSA, Facebook Lead Ads, website forms (24/7)
+
+11. **Claude: Classify Urgency** (`@n8n/n8n-nodes-langchain.lmChatOpenAi`)
+    - Prompt: "Classify this HVAC request — problem type, urgency 1–10, system affected, severity. Return JSON."
+    - Urgency 8–10: emergency (no heat/AC, water leak, system failure)
+    - Urgency 4–7: estimate needed soon
+    - Urgency 1–3: general inquiry / maintenance
+
+12. **IF: Urgency Branch** (`n8n-nodes-base.if`)
+    - 8–10 → SMS on-call tech immediately + SMS customer: "We received your request. A tech will call you within 15 minutes." Log as Emergency in ServiceTitan.
+    - 4–7 → Check tech calendars, SMS customer with 2 available time slots to reply "1" or "2". Auto-book on reply.
+    - 1–3 → Route to CRM sales pipeline. SMS: "A specialist will call within 24 hours." Auto-escalate if no contact in 24hrs.
+
+13. **Post-job (48hrs later)**: Google review request SMS
+
 ## Claude AI Tasks
-- Optional: score each lead by rating count + recency of reviews
+- Urgency classification (1–10) with problem type and severity on every inbound lead
+- Optional: score outbound scraped leads by rating count + recency of reviews
 
 ## Python Tools Needed
 - `apify_runner.py` — for local testing / one-off scrapes

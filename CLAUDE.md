@@ -236,6 +236,67 @@ These patterns appear across multiple niches — reference them instead of re-sp
 
 ---
 
+## Vault-First Build Protocol
+
+The Obsidian `business-vault` is the primary research source for all niche builds. Before building or enriching any workflow, read the corresponding industry file from the vault via the Obsidian MCP tools. Do not guess market data, build steps, or positioning — pull it from the vault.
+
+### How to read from the vault
+
+Load the tool schema first:
+```
+ToolSearch: select:mcp__ObsidianAbletonClaude__read-note,mcp__ObsidianAbletonClaude__search-vault
+```
+
+Then read the industry file:
+```
+mcp__ObsidianAbletonClaude__read-note
+  vault: "business-vault"
+  filename: "<niche>.md"
+  folder: "wiki/industries"
+```
+
+If no individual file exists yet, fall back to:
+```
+mcp__ObsidianAbletonClaude__read-note
+  vault: "business-vault"
+  filename: "Research Database.md"
+  folder: "raw"
+```
+
+### Build sequence (vault-first)
+
+```
+1. Read vault:  wiki/industries/<niche>.md  (primary research)
+2. Read SOP:    workflows/<niche>/<workflow>.md  (existing build spec, if any)
+3. Write/update SOP using vault data as source of truth
+4. Update workflows_data.js entry — pull problem_description, metrics, gtm,
+   integrations, lead_sources, positioning directly from vault content
+5. Build n8n workflow via n8n MCP tools
+```
+
+### Vault → workspace niche mapping
+
+| Vault filename | Workspace folder |
+|---|---|
+| `accounting-cpa.md` | `workflows/accounting/` |
+| `hvac.md` | `workflows/hvac/` |
+| `online-coaching.md` | `workflows/online_coaching/` |
+| `education-k12.md` | `workflows/education/` |
+| `hr-small-orgs.md` | `workflows/hr/` |
+| `healthcare-revenue-cycle.md` | `workflows/healthcare/` |
+| `water-damage-restoration.md` | `workflows/water_damage/` |
+| `ecommerce.md` | `workflows/ecommerce/` |
+| `pharmaceutical-regulatory.md` | `workflows/pharmaceutical/` |
+| `theater-performing-arts.md` | `workflows/theater/` |
+| `property-appraisal.md` | `workflows/property_appraisal/` |
+| `chiropractic.md` | `workflows/chiropractic/` |
+| `women-owned-businesses.md` | `workflows/womens_business/` |
+| `boutique-hotels.md` | `workflows/hotels/` |
+
+For niches not yet in `workflows/`, create the folder and SOP from vault data.
+
+---
+
 ## Self-Improvement Loop
 
 When a build fails or a node config is wrong:

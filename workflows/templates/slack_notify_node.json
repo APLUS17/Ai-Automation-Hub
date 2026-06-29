@@ -1,0 +1,17 @@
+{
+  "name": "Slack Notify",
+  "type": "n8n-nodes-base.slack",
+  "typeVersion": 2.3,
+  "position": [960, 300],
+  "parameters": {
+    "operation": "post",
+    "channel": {"__rl": true, "value": "={{$env.SLACK_CHANNEL_ID}}", "mode": "id"},
+    "text": "={{$json.slack_message}}",
+    "otherOptions": {
+      "mrkdwn": true
+    }
+  },
+  "credentials": {
+    "slackApi": {"id": "YOUR_CRED_ID", "name": "Slack account"}
+  }
+}

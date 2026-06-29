@@ -1,0 +1,14 @@
+# WAT framework
+.env
+.tmp/
+credentials.json
+token.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# macOS
+.DS_Store

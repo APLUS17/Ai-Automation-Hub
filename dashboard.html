@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ai Automation Hub | Enterprise Workflow Catalog</title>
+  
+  <!-- Fontshare Satoshi & Cabinet Grotesk Fonts -->
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&f[]=cabinet-grotesk@800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Satoshi', 'sans-serif'],
+            heading: ['Cabinet Grotesk', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Glassmorphism Styles */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .light .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .light .glass-panel {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-left: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    /* Transition tweaks */
+    .theme-transition {
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans theme-transition antialiased min-h-screen">
+
+  <!-- Core JS Data Hook -->
+  <script src="workflows/workflows_data.js"></script>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-900 bg-slate-950/80 backdrop-blur-md dark:border-slate-900 dark:bg-slate-950/80 light:border-slate-200 light:bg-white/80 theme-transition">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Logo Icon -->
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl font-heading font-extrabold tracking-tight text-slate-900 dark:text-slate-100 light:text-slate-900 theme-transition">AI Automation Hub</h1>
+          <p class="text-xs text-slate-500 font-medium">WAT Framework Operations</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-4">
+        <!-- Connection Diagnostic badge -->
+        <div class="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          n8n Connected
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="p-2 rounded-lg bg-slate-900 text-slate-400 hover:text-slate-100 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 border border-slate-800 transition-all cursor-pointer" aria-label="Toggle Theme">
+          <svg id="theme-toggle-dark-icon" class="hidden h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+          <svg id="theme-toggle-light-icon" class="hidden h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m2.828-9.9a5 5 0 11-7.07 7.07l7.07-7.07z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Top Hero Stats Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <!-- Stat 1 -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between h-32">
+        <div>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Niches / Industries</span>
+          <h3 id="stat-industries" class="text-4xl font-heading font-extrabold text-slate-900 dark:text-slate-100 light:text-slate-900 mt-1 theme-transition">0</h3>
+        </div>
+        <div class="absolute bottom-4 right-4 text-brand-500/20">
+          <svg class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+      </div>
+      <!-- Stat 2 -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between h-32">
+        <div>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Workflows</span>
+          <h3 id="stat-workflows" class="text-4xl font-heading font-extrabold text-slate-900 dark:text-slate-100 light:text-slate-900 mt-1 theme-transition">0</h3>
+        </div>
+        <div class="absolute bottom-4 right-4 text-indigo-500/20">
+          <svg class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18.5" />
+          </svg>
+        </div>
+      </div>
+      <!-- Stat 3 -->
+      <div class="glass-card rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between h-32">
+        <div>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">.env Config Health</span>
+          <h3 id="stat-env-health" class="text-4xl font-heading font-extrabold text-slate-900 dark:text-slate-100 light:text-slate-900 mt-1 theme-transition">0%</h3>
+        </div>
+        <div class="absolute bottom-4 right-4 text-emerald-500/20">
+          <svg class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search and Categorization Area -->
+    <section class="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div class="w-full md:max-w-md relative">
+        <label for="search-input" class="sr-only">Search workflows</label>
+        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </span>
+        <input type="text" id="search-input" placeholder="Search workflows, nodes, tools…" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-900 light:bg-slate-100 border border-slate-800 dark:border-slate-800 light:border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 light:text-slate-900 transition-all font-medium">
+      </div>
+      
+      <div class="w-full md:w-auto overflow-x-auto py-1 flex gap-2 no-scrollbar" id="category-filters-container">
+        <!-- Categories injected dynamically -->
+      </div>
+    </section>
+
+    <!-- Main Workflow Card Grid -->
+    <section id="workflow-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Dynamic workflow cards injected here -->
+    </section>
+  </main>
+
+  <!-- Slide-out Drawer Panel -->
+  <div id="detail-drawer-overlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" aria-hidden="true"></div>
+  
+  <div id="detail-drawer" class="fixed right-0 top-0 bottom-0 z-50 w-full max-w-4xl glass-panel translate-x-full transition-transform duration-300 flex flex-col" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <!-- Header -->
+    <div class="p-6 border-b border-slate-800 dark:border-slate-800 light:border-slate-200 flex justify-between items-center bg-slate-950/40">
+      <div>
+        <span id="drawer-industry-badge" class="text-xs font-bold text-brand-500 uppercase tracking-widest">Industry</span>
+        <h2 id="drawer-title" class="text-2xl font-heading font-extrabold text-slate-900 dark:text-slate-100 light:text-slate-900 mt-1 theme-transition">Workflow Name</h2>
+      </div>
+      <button id="drawer-close" class="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" aria-label="Close panel">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Multi-Build Tabs Container (Shows when industry has multiple builds) -->
+    <div id="multi-build-tabs-bar" class="hidden px-6 py-2 border-b border-slate-900 bg-slate-950/20 flex gap-2 overflow-x-auto">
+      <!-- Tabs injected here -->
+    </div>
+
+    <!-- Content Drawer Scrollable Container -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-8" id="drawer-body">
+      <!-- Top Grid: Metadata & SVG Flowchart -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left: Metadata Panel -->
+        <div class="lg:col-span-5 bg-slate-900/40 dark:bg-slate-900/40 light:bg-slate-50 border border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 rounded-xl p-5 space-y-4">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Project Specifications</h3>
+          
+          <table class="w-full text-sm border-collapse">
+            <tbody>
+              <tr class="border-b border-slate-800/30 dark:border-slate-800/30 light:border-slate-200/50">
+                <td class="py-2.5 font-bold text-slate-500">MVP Time</td>
+                <td id="meta-mvp-time" class="py-2.5 text-right font-medium text-slate-900 dark:text-slate-100 light:text-slate-900">45 mins</td>
+              </tr>
+              <tr class="border-b border-slate-800/30 dark:border-slate-800/30 light:border-slate-200/50">
+                <td class="py-2.5 font-bold text-slate-500">MVP Cost</td>
+                <td id="meta-mvp-cost" class="py-2.5 text-right font-medium text-slate-900 dark:text-slate-100 light:text-slate-900">$0–$100</td>
+              </tr>
+              <tr class="border-b border-slate-800/30 dark:border-slate-800/30 light:border-slate-200/50">
+                <td class="py-2.5 font-bold text-slate-500">Best For</td>
+                <td id="meta-best-for" class="py-2.5 text-right font-medium text-slate-900 dark:text-slate-100 light:text-slate-900">Developer</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 font-bold text-slate-500">Required Tools</td>
+                <td id="meta-tools" class="py-2.5 text-right flex flex-wrap gap-1 justify-end">
+                  <!-- Badges injected -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="pt-4 flex flex-col gap-2">
+            <a id="cta-n8n" href="http://35.238.129.106:5678" target="_blank" class="w-full py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-center text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-brand-500/10">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Open Live n8n Workflow
+            </a>
+            <button id="cta-code-app" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-center text-sm border border-slate-700 flex items-center justify-center gap-2 cursor-pointer">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              View Claude Code App
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Flowchart Canvas -->
+        <div class="lg:col-span-7 bg-slate-900/20 border border-slate-800/80 dark:border-slate-800/80 light:border-slate-200 rounded-xl p-5 flex flex-col">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">n8n Node Pipeline</h3>
+          <div id="flowchart-container" class="flex-1 min-h-[220px] flex items-center justify-center bg-slate-950/40 rounded-lg border border-slate-900 p-4 overflow-x-auto">
+            <!-- Dynamic SVG flow chart drawn here -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Problem Statement Block -->
+      <section class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span>
+          <h3 class="text-xs font-bold text-brand-500 uppercase tracking-widest">The Problem</h3>
+        </div>
+        <div class="bg-slate-900/30 border border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 p-6 rounded-2xl">
+          <h4 id="problem-subheader" class="text-xl font-heading font-extrabold text-slate-900 dark:text-slate-100 light:text-slate-900 mb-2">Problem Statement</h4>
+          <p id="problem-desc" class="text-slate-400 text-sm leading-relaxed mb-4">Description of friction…</p>
+          
+          <!-- Reddit block -->
+          <div class="p-4 rounded-xl bg-slate-950/60 dark:bg-slate-950/60 light:bg-slate-100 border border-slate-900 flex items-start gap-3">
+            <div class="p-2 rounded-lg bg-orange-500/10 text-orange-400 border border-orange-500/20">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 2.822 1.178 5.372 3.076 7.184l-.443 2.656a.502.502 0 00.725.53l2.846-1.579A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm3.327 12.837c-.381.381-1.002.381-1.383 0L12 12.883l-1.944 1.954c-.381.381-1.002.381-1.383 0-.381-.381-.381-1.002 0-1.383L10.617 11.5 8.673 9.556c-.381-.381-.381-1.002 0-1.383.381-.381 1.002-.381 1.383 0L12 10.117l1.944-1.944c.381-.381 1.002-.381 1.383 0 .381.381.381 1.002 0 1.383L13.383 11.5l1.944 1.954c.381.381.381 1.002 0 1.383z"/>
+              </svg>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-slate-500 uppercase">Community Signal</span>
+              <p id="problem-reddit-title" class="text-sm font-semibold text-slate-800 dark:text-slate-200 light:text-slate-800 mt-0.5">r/reddit-post-title</p>
+              <span id="problem-reddit-comments" class="text-xs text-orange-400 font-medium">0 comments</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Market Snapshot & Metric Grid -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Market Description -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
+            <h3 class="text-xs font-bold text-indigo-500 uppercase tracking-widest">Market Snapshot</h3>
+          </div>
+          <div class="bg-slate-900/30 border border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 p-6 rounded-2xl h-full flex flex-col justify-center">
+            <p id="market-desc" class="text-slate-400 text-sm leading-relaxed">Audience overview…</p>
+          </div>
+        </div>
+
+        <!-- Metric Grid -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="h-1.5 w-1.5 rounded-full bg-slate-500"></span>
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Metric Grid</h3>
+          </div>
+          
+          <div id="metrics-grid-container" class="grid grid-cols-3 gap-4">
+            <!-- 3 Metrics injected dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Detail Navigation Sub-tabs -->
+      <section class="space-y-4">
+        <!-- Sub-tabs bar -->
+        <div class="flex border-b border-slate-800/50 dark:border-slate-800/50 light:border-slate-200">
+          <button id="tab-nodes" class="sub-tab-btn py-2.5 px-4 font-semibold text-sm border-b-2 border-brand-500 text-brand-400 cursor-pointer" onclick="switchSubTab('nodes')">Build Details</button>
+          <button id="tab-ai" class="sub-tab-btn py-2.5 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 cursor-pointer" onclick="switchSubTab('ai')">AI Prompts</button>
+          <button id="tab-python" class="sub-tab-btn py-2.5 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 cursor-pointer" onclick="switchSubTab('python')">Python Helpers</button>
+          <button id="tab-test" class="sub-tab-btn py-2.5 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-300 cursor-pointer" onclick="switchSubTab('test')">Test Plan</button>
+        </div>
+
+        <!-- Sub-tab contents -->
+        <div class="bg-slate-900/30 border border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 p-6 rounded-2xl min-h-[160px] text-sm">
+          <!-- Build Details Tab -->
+          <div id="subtab-content-nodes" class="sub-tab-content space-y-4">
+            <h4 class="font-bold text-slate-300">n8n Node Blueprint</h4>
+            <div id="blueprint-steps" class="space-y-3">
+              <!-- Steps list -->
+            </div>
+          </div>
+
+          <!-- AI Tasks Tab -->
+          <div id="subtab-content-ai" class="sub-tab-content hidden space-y-4">
+            <h4 class="font-bold text-slate-300">Claude AI Prompt Orchestration</h4>
+            <div id="blueprint-ai-tasks" class="whitespace-pre-line text-slate-400 leading-relaxed font-mono bg-slate-950/40 p-4 rounded-xl border border-slate-900">
+              Prompts go here…
+            </div>
+          </div>
+
+          <!-- Python Helpers Tab -->
+          <div id="subtab-content-python" class="sub-tab-content hidden space-y-4">
+            <h4 class="font-bold text-slate-300">Local Execution Scripts (Layer 3)</h4>
+            <div id="blueprint-python-tools" class="whitespace-pre-line text-slate-400 leading-relaxed font-mono bg-slate-950/40 p-4 rounded-xl border border-slate-900">
+              Scripts details…
+            </div>
+          </div>
+
+          <!-- Test Plan Tab -->
+          <div id="subtab-content-test" class="sub-tab-content hidden space-y-4">
+            <h4 class="font-bold text-slate-300">Quality Assurance Checklist</h4>
+            <div id="blueprint-test-plan" class="space-y-2">
+              <!-- Checkboxes list -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Customer GTM Section -->
+      <section class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+          <h3 class="text-xs font-bold text-emerald-500 uppercase tracking-widest">Where to Get Customers</h3>
+        </div>
+
+        <div id="gtm-channels-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- 3 GTM Cards -->
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Logic -->
+  <script>
+    // Theme Manager
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    function initTheme() {
+      if (localStorage.getItem('color-theme') === 'light' || 
+          (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+        lightIcon.classList.remove('hidden');
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+        darkIcon.classList.remove('hidden');
+      }
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+        localStorage.setItem('color-theme', 'light');
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
+      } else {
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      }
+    });
+
+    initTheme();
+
+    // App State
+    let activeCategory = 'All';
+    let searchQuery = '';
+    let selectedWorkflow = null;
+    let selectedSubTab = 'nodes';
+
+    // Categories
+    const categories = ['All', 'Accounting', 'HVAC', 'Coaching', 'Education', 'HR', 'Healthcare', 'Theater', 'Property', 'Chiropractic', 'Women', 'Hotels', 'Pharma'];
+    
+    // Normalize categories inside data
+    function getCleanCategory(industryName) {
+      const lower = industryName.toLowerCase();
+      if (lower.includes('accounting')) return 'Accounting';
+      if (lower.includes('hvac')) return 'HVAC';
+      if (lower.includes('coaching')) return 'Coaching';
+      if (lower.includes('education')) return 'Education';
+      if (lower.includes('hr')) return 'HR';
+      if (lower.includes('healthcare')) return 'Healthcare';
+      if (lower.includes('theater')) return 'Theater';
+      if (lower.includes('appraisal') || lower.includes('property')) return 'Property';
+      if (lower.includes('chiropractic')) return 'Chiropractic';
+      if (lower.includes('women')) return 'Women';
+      if (lower.includes('hotel')) return 'Hotels';
+      if (lower.includes('pharma') || lower.includes('pharmaceutical')) return 'Pharma';
+      return 'General';
+    }
+
+    // Init UI elements
+    const statIndustries = document.getElementById('stat-industries');
+    const statWorkflows = document.getElementById('stat-workflows');
+    const statEnvHealth = document.getElementById('stat-env-health');
+    const workflowGrid = document.getElementById('workflow-grid');
+    const searchInput = document.getElementById('search-input');
+    const categoryContainer = document.getElementById('category-filters-container');
+
+    const drawer = document.getElementById('detail-drawer');
+    const drawerOverlay = document.getElementById('detail-drawer-overlay');
+    const drawerClose = document.getElementById('drawer-close');
+
+    // Build categories filters
+    function renderCategoryFilters() {
+      categoryContainer.innerHTML = categories.map(cat => {
+        const isActive = activeCategory === cat;
+        return `
+          <button class="px-4 py-1.5 text-xs font-semibold rounded-full border transition-all cursor-pointer whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-brand-500
+            ${isActive 
+              ? 'bg-brand-600 text-white border-brand-600 shadow-md shadow-brand-500/10' 
+              : 'bg-slate-900 hover:bg-slate-800 text-slate-400 border-slate-800 hover:text-slate-200 dark:bg-slate-900 light:bg-slate-100 dark:border-slate-800 light:border-slate-200 dark:text-slate-400 light:text-slate-600 dark:hover:text-white light:hover:text-black'}"
+            onclick="setCategory('${cat}')">
+            ${cat}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setCategory(cat) {
+      activeCategory = cat;
+      renderCategoryFilters();
+      renderWorkflows();
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase();
+      renderWorkflows();
+    });
+
+    // Env diagnostic parser helpers
+    function getKeysStatus(requiredIntegrations) {
+      if (!requiredIntegrations || requiredIntegrations.length === 0) return { score: 100, active: [], missing: [] };
+      
+      const mappedConfigKeys = (typeof CONFIGURED_KEYS !== 'undefined') ? CONFIGURED_KEYS : [];
+      let configured = 0;
+      let active = [];
+      let missing = [];
+
+      requiredIntegrations.forEach(integration => {
+        // Map common titles to .env keys
+        let matchKeys = [integration.toUpperCase()];
+        if (integration.toLowerCase().includes('apify')) matchKeys.push('APIFY_API_TOKEN');
+        if (integration.toLowerCase().includes('firecrawl')) matchKeys.push('FIRECRAWL_API_KEY');
+        if (integration.toLowerCase().includes('twilio')) matchKeys.push('TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN');
+        if (integration.toLowerCase().includes('mailgun')) matchKeys.push('MAILGUN_API_KEY', 'MAILGUN_DOMAIN');
+        if (integration.toLowerCase().includes('ghl') || integration.toLowerCase().includes('gohighlevel')) matchKeys.push('GHL_API_KEY');
+        if (integration.toLowerCase().includes('sheets') || integration.toLowerCase().includes('docs') || integration.toLowerCase().includes('drive') || integration.toLowerCase().includes('google_service_account')) matchKeys.push('GOOGLE_SERVICE_ACCOUNT_JSON');
+        if (integration.toLowerCase().includes('gmail')) matchKeys.push('GMAIL_CLIENT_ID');
+        if (integration.toLowerCase().includes('airtable')) matchKeys.push('AIRTABLE_API_KEY');
+        if (integration.toLowerCase().includes('shopify')) matchKeys.push('SHOPIFY_API_KEY');
+        if (integration.toLowerCase().includes('bland')) matchKeys.push('BLAND_API_KEY');
+        if (integration.toLowerCase().includes('cal.com')) matchKeys.push('CALCOM_API_KEY');
+        if (integration.toLowerCase().includes('slack')) matchKeys.push('SLACK_BOT_TOKEN');
+        if (integration.toLowerCase().includes('anthropic') || integration.toLowerCase().includes('claude')) matchKeys.push('ANTHROPIC_API_KEY');
+        if (integration.toLowerCase().includes('openrouter')) matchKeys.push('OPENROUTER_API_KEY');
+        
+        let isConfigured = matchKeys.some(mk => mappedConfigKeys.includes(mk));
+        if (isConfigured) {
+          configured++;
+          active.push(integration);
+        } else {
+          missing.push(integration);
+        }
+      });
+
+      return {
+        score: Math.round((configured / requiredIntegrations.length) * 100),
+        active,
+        missing
+      };
+    }
+
+    // Render Workflows Grid
+    function renderWorkflows() {
+      if (typeof WORKFLOWS_DATA === 'undefined') {
+        workflowGrid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 font-medium">
+            No workflow data found. Run <code class="px-1.5 py-0.5 rounded bg-slate-900 font-mono text-brand-400">python tools/parse_workflows.py</code> to compile the data.
+          </div>
+        `;
+        return;
+      }
+
+      // Compute statistics
+      const uniqueIndustries = new Set(WORKFLOWS_DATA.map(w => w.industry));
+      statIndustries.innerText = uniqueIndustries.size.toString();
+      statWorkflows.innerText = WORKFLOWS_DATA.length.toString();
+      
+      const allIntegrations = [...new Set(WORKFLOWS_DATA.flatMap(w => w.integrations))];
+      const overallKeys = getKeysStatus(allIntegrations);
+      statEnvHealth.innerText = `${overallKeys.score}%`;
+
+      // Filter workflows
+      let filtered = WORKFLOWS_DATA.filter(w => {
+        const cat = getCleanCategory(w.industry);
+        const matchesCategory = activeCategory === 'All' || cat === activeCategory;
+        
+        const text = `${w.name} ${w.industry} ${w.description} ${w.integrations.join(' ')}`.toLowerCase();
+        const matchesSearch = text.includes(searchQuery);
+        
+        return matchesCategory && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        workflowGrid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 font-medium">
+            No workflows matches your search or category filter.
+          </div>
+        `;
+        return;
+      }
+
+      workflowGrid.innerHTML = filtered.map((w, index) => {
+        const stats = getKeysStatus(w.integrations);
+        const cleanCat = getCleanCategory(w.industry);
+        
+        // Build badges
+        const badgeHTML = w.integrations.map(integ => {
+          const active = stats.active.includes(integ);
+          return `
+            <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md border
+              ${active 
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+                : 'bg-slate-900 text-slate-500 border-slate-800 dark:bg-slate-900 dark:border-slate-800 light:bg-slate-100 light:border-slate-200' }">
+              ${active ? '● ' : ''}${integ}
+            </span>
+          `;
+        }).join('');
+
+        return `
+          <div class="glass-card rounded-2xl p-6 flex flex-col justify-between hover:border-slate-700/80 dark:hover:border-slate-800/80 hover:shadow-xl hover:shadow-brand-500/[0.02] transition-all duration-300 group cursor-pointer" onclick="openDrawer(${index}, '${w.industry}')">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="text-[10px] font-extrabold tracking-widest text-slate-500 uppercase">${w.industry}</span>
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border
+                  ${stats.score === 100 
+                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+                    : stats.score > 0 
+                      ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' 
+                      : 'bg-rose-500/10 text-rose-400 border-rose-500/20'}">
+                  ${stats.score}% Configured
+                </span>
+              </div>
+              
+              <h4 class="text-lg font-heading font-extrabold text-slate-900 dark:text-slate-100 light:text-slate-900 group-hover:text-brand-500 transition-colors mb-2 line-clamp-1">${w.name}</h4>
+              <p class="text-sm text-slate-400 leading-relaxed line-clamp-3 mb-6">${w.description}</p>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="h-px bg-slate-900 dark:bg-slate-900 light:bg-slate-200"></div>
+              <div class="flex flex-wrap gap-1.5">
+                ${badgeHTML || '<span class="text-xs text-slate-500 italic">No integrations needed</span>'}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Interactive Node SVG Chart Drawer
+    function drawFlowchart(nodes) {
+      const container = document.getElementById('flowchart-container');
+      if (!nodes || nodes.length === 0) {
+        container.innerHTML = `<span class="text-xs text-slate-500 italic">No node mapping available</span>`;
+        return;
+      }
+
+      // Layout params
+      const nodeWidth = 140;
+      const nodeHeight = 55;
+      const gapX = 50;
+      const paddingX = 20;
+      const heightY = 100;
+      
+      const totalWidth = paddingX * 2 + nodes.length * nodeWidth + (nodes.length - 1) * gapX;
+      
+      let svgContent = `<svg width="${totalWidth}" height="${heightY * 2}" class="mx-auto" xmlns="http://www.w3.org/2000/svg">`;
+      
+      // Node type styling helpers
+      function getNodeStyles(nodeType) {
+        const type = nodeType.toLowerCase();
+        if (type.includes('trigger')) return { bg: '#2563eb', border: '#3b82f6', text: '#ffffff' }; // blue
+        if (type.includes('code')) return { bg: '#7c3aed', border: '#8b5cf6', text: '#ffffff' }; // purple
+        if (type.includes('httprequest') || type.includes('api')) return { bg: '#db2777', border: '#ec4899', text: '#ffffff' }; // pink
+        if (type.includes('sheet') || type.includes('doc') || type.includes('airtable')) return { bg: '#059669', border: '#10b981', text: '#ffffff' }; // green
+        if (type.includes('gmail') || type.includes('slack') || type.includes('twilio') || type.includes('mailgun')) return { bg: '#ea580c', border: '#f97316', text: '#ffffff' }; // orange
+        return { bg: '#475569', border: '#64748b', text: '#ffffff' }; // gray
+      }
+
+      // Draw arrows
+      for (let i = 0; i < nodes.length - 1; i++) {
+        const startX = paddingX + (i * (nodeWidth + gapX)) + nodeWidth;
+        const endX = startX + gapX;
+        const y = heightY;
+        
+        svgContent += `
+          <line x1="${startX}" y1="${y}" x2="${endX}" y2="${y}" stroke="#334155" stroke-width="2" />
+          <polygon points="${endX},${y} ${endX-6},${y-4} ${endX-6},${y+4}" fill="#334155" />
+        `;
+      }
+
+      // Draw boxes
+      nodes.forEach((node, index) => {
+        const x = paddingX + (index * (nodeWidth + gapX));
+        const y = heightY - (nodeHeight / 2);
+        const styles = getNodeStyles(node.type);
+        
+        // Node Type Label
+        const typeLabel = node.type.split('.').pop().replace('Trigger', '').replace('Node', '');
+        
+        svgContent += `
+          <g>
+            <rect x="${x}" y="${y}" width="${nodeWidth}" height="${nodeHeight}" rx="8" fill="${styles.bg}" stroke="${styles.border}" stroke-width="1.5" />
+            <text x="${x + (nodeWidth / 2)}" y="${y + 20}" font-family="Satoshi" font-size="11" font-weight="bold" fill="${styles.text}" text-anchor="middle">${node.name}</text>
+            <text x="${x + (nodeWidth / 2)}" y="${y + 38}" font-family="Satoshi" font-size="9" fill="${styles.text}" opacity="0.6" text-anchor="middle">${typeLabel}</text>
+          </g>
+        `;
+      });
+
+      svgContent += `</svg>`;
+      container.innerHTML = svgContent;
+    }
+
+    // Open Detail Drawer
+    let drawerWorkflows = [];
+    let activeWorkflowIndex = 0;
+
+    function openDrawer(index, industryName) {
+      selectedSubTab = 'nodes';
+      switchSubTab('nodes');
+
+      // Check if clicked from grid, search index matches filtered workflows
+      let targetWorkflow = null;
+      if (typeof industryName !== 'undefined') {
+        // Multi-build check: Find all builds for this industry
+        drawerWorkflows = WORKFLOWS_DATA.filter(w => w.industry === industryName);
+        activeWorkflowIndex = drawerWorkflows.findIndex(w => w.name === WORKFLOWS_DATA.filter(w => {
+          const cat = getCleanCategory(w.industry);
+          const matchesCategory = activeCategory === 'All' || cat === activeCategory;
+          const text = `${w.name} ${w.industry} ${w.description} ${w.integrations.join(' ')}`.toLowerCase();
+          return matchesCategory && text.includes(searchQuery);
+        })[index].name);
+        
+        targetWorkflow = drawerWorkflows[activeWorkflowIndex];
+      } else {
+        drawerWorkflows = [WORKFLOWS_DATA[index]];
+        activeWorkflowIndex = 0;
+        targetWorkflow = drawerWorkflows[0];
+      }
+
+      selectedWorkflow = targetWorkflow;
+      renderDrawerContent();
+
+      // Animate sliding drawer open
+      drawerOverlay.classList.remove('pointer-events-none', 'opacity-0');
+      drawerOverlay.classList.add('opacity-100');
+      drawer.classList.remove('translate-x-full');
+      
+      // Keyboard Accessibility trapping
+      document.addEventListener('keydown', closeOnEscape);
+    }
+
+    function renderDrawerContent() {
+      const w = selectedWorkflow;
+      const stats = getKeysStatus(w.integrations);
+
+      document.getElementById('drawer-industry-badge').innerText = w.industry;
+      document.getElementById('drawer-title').innerText = w.name;
+      
+      // Render multi-build tabs bar if industry has multiple workflows
+      const tabsBar = document.getElementById('multi-build-tabs-bar');
+      if (drawerWorkflows.length > 1) {
+        tabsBar.classList.remove('hidden');
+        tabsBar.innerHTML = drawerWorkflows.map((build, i) => {
+          const active = i === activeWorkflowIndex;
+          return `
+            <button class="px-3 py-1 text-xs font-semibold rounded-lg border transition-all cursor-pointer whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-brand-500
+              ${active 
+                ? 'bg-slate-900 text-brand-400 border-slate-800' 
+                : 'bg-transparent text-slate-500 hover:text-slate-300 border-transparent'}"
+              onclick="selectBuild(${i})">
+              ${build.name}
+            </button>
+          `;
+        }).join('');
+      } else {
+        tabsBar.classList.add('hidden');
+      }
+
+      // Metadata Tool Badges
+      const metaTools = document.getElementById('meta-tools');
+      metaTools.innerHTML = w.integrations.map(integ => {
+        const active = stats.active.includes(integ);
+        return `
+          <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md border
+            ${active 
+              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+              : 'bg-slate-950 text-slate-500 border-slate-900 dark:bg-slate-950 dark:border-slate-900 light:bg-slate-100 light:border-slate-200'}">
+            ${integ}
+          </span>
+        `;
+      }).join('') || '<span class="text-xs text-slate-500 italic">None required</span>';
+
+      // SVG Draw call
+      drawFlowchart(w.nodes);
+
+      // Description & Problem section
+      document.getElementById('problem-subheader').innerText = w.problem_subheader;
+      document.getElementById('problem-desc').innerText = w.problem_description;
+      document.getElementById('problem-reddit-title').innerText = w.reddit_title;
+      document.getElementById('problem-reddit-comments').innerText = w.reddit_comments;
+
+      // Market Snapshot
+      document.getElementById('market-desc').innerText = w.description;
+
+      // Metric Grid
+      const metricsContainer = document.getElementById('metrics-grid-container');
+      metricsContainer.innerHTML = w.metrics.map(m => `
+        <div class="bg-slate-900/40 dark:bg-slate-900/40 light:bg-slate-50 border border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 rounded-xl p-4 text-center">
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none block mb-1">${m.label}</span>
+          <span class="text-lg font-heading font-extrabold text-slate-900 dark:text-slate-100 light:text-slate-900 leading-none">${m.value}</span>
+        </div>
+      `).join('');
+
+      // Subtabs update
+      const stepsContainer = document.getElementById('blueprint-steps');
+      stepsContainer.innerHTML = w.nodes.map((node, i) => {
+        const typeLabel = node.type.split('.').pop().replace('Trigger', '').replace('Node', '');
+        return `
+          <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-950/40 dark:bg-slate-950/40 light:bg-slate-100 border border-slate-900 dark:border-slate-900 light:border-slate-200">
+            <span class="h-6 w-6 rounded-lg bg-brand-600/10 text-brand-400 border border-brand-500/20 text-xs font-extrabold flex items-center justify-center flex-shrink-0 mt-0.5">${i+1}</span>
+            <div>
+              <p class="font-semibold text-slate-900 dark:text-slate-100 light:text-slate-900">${node.name}</p>
+              <p class="text-xs text-slate-500 mt-0.5">Type: <code class="font-mono text-brand-400">${node.type}</code></p>
+            </div>
+          </div>
+        `;
+      }).join('') || '<span class="text-xs text-slate-500 italic">No node steps outlined.</span>';
+
+      document.getElementById('blueprint-ai-tasks').innerText = w.ai_tasks;
+      document.getElementById('blueprint-python-tools').innerText = w.python_tools;
+      
+      // Test plan checklists
+      const testPlanContainer = document.getElementById('blueprint-test-plan');
+      const lines = w.test_plan.split('\n');
+      let testChecksHTML = '';
+      lines.forEach((line, i) => {
+        line = line.stripMarkdownLists();
+        if (line) {
+          testChecksHTML += `
+            <label class="flex items-start gap-2.5 p-2 rounded-lg hover:bg-slate-900/40 dark:hover:bg-slate-900/40 light:hover:bg-slate-100 cursor-pointer">
+              <input type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-800 dark:border-slate-800 light:border-slate-200 text-brand-600 focus:ring-brand-500 focus:ring-offset-slate-950 cursor-pointer">
+              <span class="text-slate-400 leading-normal select-none">${line}</span>
+            </label>
+          `;
+        }
+      });
+      testPlanContainer.innerHTML = testChecksHTML || '<span class="text-xs text-slate-500 italic">No test plan checklist specified.</span>';
+
+      // GTM channels
+      const gtmContainer = document.getElementById('gtm-channels-container');
+      gtmContainer.innerHTML = w.gtm.map(ch => `
+        <div class="bg-slate-900/30 border border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 p-5 rounded-2xl">
+          <h4 class="font-semibold text-slate-900 dark:text-slate-100 light:text-slate-900 line-clamp-1 mb-1">${ch.channel}</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">${ch.desc}</p>
+        </div>
+      `).join('');
+
+      // Show/hide Claude Code button based on content
+      const ctaCodeApp = document.getElementById('cta-code-app');
+      if (w.code_app.toLowerCase().includes('not required') || w.code_app.toLowerCase().includes('none')) {
+        ctaCodeApp.classList.add('hidden');
+      } else {
+        ctaCodeApp.classList.remove('hidden');
+      }
+    }
+
+    // Helper prototype extensions to strip list numbers and dashes
+    String.prototype.stripMarkdownLists = function() {
+      return this.replace(/^\s*[\-\*\+]\s+/, '').replace(/^\s*\d+\.\s+/, '').trim();
+    };
+
+    function selectBuild(index) {
+      activeWorkflowIndex = index;
+      selectedWorkflow = drawerWorkflows[activeWorkflowIndex];
+      renderDrawerContent();
+    }
+
+    // Close Detail Drawer
+    function closeDrawer() {
+      drawerOverlay.classList.remove('opacity-100');
+      drawerOverlay.classList.add('opacity-0', 'pointer-events-none');
+      drawer.classList.add('translate-x-full');
+      document.removeEventListener('keydown', closeOnEscape);
+      selectedWorkflow = null;
+    }
+
+    function closeOnEscape(e) {
+      if (e.key === 'Escape') closeDrawer();
+    }
+
+    drawerClose.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', closeDrawer);
+
+    // Switch Sub-tabs
+    window.switchSubTab = function(tabName) {
+      selectedSubTab = tabName;
+      
+      const tabBtns = document.querySelectorAll('.sub-tab-btn');
+      tabBtns.forEach(btn => {
+        const isTarget = btn.id === `tab-${tabName}`;
+        btn.className = `sub-tab-btn py-2.5 px-4 font-semibold text-sm border-b-2 transition-all cursor-pointer focus:outline-none
+          ${isTarget 
+            ? 'border-brand-500 text-brand-500' 
+            : 'border-transparent text-slate-500 hover:text-slate-300'}`;
+      });
+
+      const tabContents = document.querySelectorAll('.sub-tab-content');
+      tabContents.forEach(content => {
+        if (content.id === `subtab-content-${tabName}`) {
+          content.classList.remove('hidden');
+        } else {
+          content.classList.add('hidden');
+        }
+      });
+    }
+
+    // Run Initializations
+    renderCategoryFilters();
+    renderWorkflows();
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "Google Sheets Append",
+  "type": "n8n-nodes-base.googleSheets",
+  "typeVersion": 4.5,
+  "position": [720, 300],
+  "parameters": {
+    "operation": "append",
+    "documentId": {"__rl": true, "value": "YOUR_SPREADSHEET_ID", "mode": "id"},
+    "sheetName": {"__rl": true, "value": "Sheet1", "mode": "name"},
+    "columns": {
+      "mappingMode": "autoMapInputData",
+      "value": {},
+      "matchingColumns": [],
+      "schema": []
+    },
+    "options": {
+      "cellFormat": "USER_ENTERED",
+      "handlingExistingData": "insertInNewRow"
+    }
+  },
+  "credentials": {
+    "googleSheetsOAuth2Api": {"id": "YOUR_CRED_ID", "name": "Google Sheets account"}
+  }
+}

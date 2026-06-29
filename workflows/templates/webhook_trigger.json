@@ -1,0 +1,12 @@
+{
+  "name": "Webhook Trigger",
+  "type": "n8n-nodes-base.webhook",
+  "typeVersion": 2,
+  "position": [240, 300],
+  "parameters": {
+    "httpMethod": "POST",
+    "path": "your-path-here",
+    "responseMode": "responseNode",
+    "options": {}
+  }
+}

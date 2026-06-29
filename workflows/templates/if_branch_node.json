@@ -1,0 +1,28 @@
+{
+  "name": "IF Branch",
+  "type": "n8n-nodes-base.if",
+  "typeVersion": 2,
+  "position": [720, 300],
+  "parameters": {
+    "conditions": {
+      "options": {
+        "caseSensitive": true,
+        "leftValue": "",
+        "typeValidation": "strict"
+      },
+      "conditions": [
+        {
+          "id": "condition-1",
+          "leftValue": "={{$json.status}}",
+          "rightValue": "interested",
+          "operator": {
+            "type": "string",
+            "operation": "equals"
+          }
+        }
+      ],
+      "combinator": "and"
+    }
+  },
+  "_note": "true branch = condition met, false branch = condition not met"
+}

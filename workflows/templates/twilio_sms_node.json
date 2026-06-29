@@ -1,0 +1,15 @@
+{
+  "name": "Send SMS via Twilio",
+  "type": "n8n-nodes-base.twilio",
+  "typeVersion": 1,
+  "position": [720, 300],
+  "parameters": {
+    "operation": "send",
+    "from": "={{$env.TWILIO_FROM_NUMBER}}",
+    "to": "={{$json.phone}}",
+    "message": "={{$json.sms_body}}"
+  },
+  "credentials": {
+    "twilioApi": {"id": "YOUR_CRED_ID", "name": "Twilio account"}
+  }
+}

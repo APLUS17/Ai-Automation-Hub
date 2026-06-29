@@ -1,0 +1,20 @@
+{
+  "name": "Claude AI",
+  "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+  "typeVersion": 1,
+  "position": [480, 300],
+  "parameters": {
+    "model": "anthropic/claude-sonnet-4-6",
+    "options": {
+      "temperature": 0.3,
+      "maxTokens": 2048
+    }
+  },
+  "credentials": {
+    "openAiApi": {
+      "id": "HhRl2tZkR2KwXqsT",
+      "name": "OpenRouter"
+    }
+  },
+  "_note": "Uses OpenRouter credential already configured in n8n. Set baseURL to https://openrouter.ai/api/v1 in credential."
+}

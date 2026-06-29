@@ -1,0 +1,18 @@
+{
+  "name": "Wait",
+  "type": "n8n-nodes-base.wait",
+  "typeVersion": 1.1,
+  "position": [720, 300],
+  "parameters": {
+    "resume": "timeInterval",
+    "unit": "days",
+    "amount": 2,
+    "options": {}
+  },
+  "_variants": {
+    "2_days": {"unit": "days", "amount": 2},
+    "24_hours": {"unit": "hours", "amount": 24},
+    "7_days": {"unit": "days", "amount": 7},
+    "webhook_resume": {"resume": "webhook"}
+  }
+}

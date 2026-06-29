@@ -1,0 +1,30 @@
+{
+  "name": "Run Apify Actor",
+  "type": "n8n-nodes-base.httpRequest",
+  "typeVersion": 4.2,
+  "position": [480, 300],
+  "parameters": {
+    "method": "POST",
+    "url": "https://api.apify.com/v2/acts/{{ACTOR_ID}}/runs",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpQueryAuth",
+    "options": {},
+    "sendQuery": true,
+    "queryParameters": {
+      "parameters": [{"name": "token", "value": "={{$env.APIFY_API_TOKEN}}"}]
+    },
+    "sendBody": true,
+    "contentType": "json",
+    "body": {
+      "searchStringsArray": ["={{$json.query}}"],
+      "maxCrawledPlacesPerSearch": 50
+    }
+  },
+  "_common_actor_ids": {
+    "google-maps": "nwua9Gu5YkAVxpyIB",
+    "zillow": "BetrV6SJsXcdzGGZf",
+    "tripadvisor-reviews": "maxcopell~tripadvisor-reviews",
+    "booking-scraper": "voyager~booking-scraper",
+    "google-reviews": "compass~google-maps-reviews-scraper"
+  }
+}

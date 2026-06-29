@@ -1,0 +1,23 @@
+{
+  "name": "Send Email",
+  "type": "n8n-nodes-base.gmail",
+  "typeVersion": 2.1,
+  "position": [720, 300],
+  "parameters": {
+    "operation": "send",
+    "sendTo": "={{$json.email}}",
+    "subject": "={{$json.email_subject}}",
+    "emailType": "html",
+    "message": "={{$json.email_body}}",
+    "options": {
+      "appendAttribution": false
+    }
+  },
+  "credentials": {
+    "gmailOAuth2": {"id": "6xfr5f40H92Sj1Eb", "name": "Gmail account"}
+  },
+  "_alt_mailgun": {
+    "type": "n8n-nodes-base.mailgun",
+    "note": "Use Mailgun node instead for bulk sends or custom domains"
+  }
+}

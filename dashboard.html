@@ -437,23 +437,70 @@
     let selectedSubTab = 'nodes';
 
     // Categories
-    const categories = ['All', 'Accounting', 'HVAC', 'Coaching', 'Education', 'HR', 'Healthcare', 'Theater', 'Property', 'Chiropractic', 'Women', 'Hotels', 'Pharma'];
-    
+    const categories = [
+      'All',
+      'Accounting', 'AI Education', 'Adult Education', 'Automation',
+      'Childcare', 'Chiropractic', 'Churches', 'Cleaning', 'Coaching',
+      'Construction', 'Coworking', 'Dental', 'Driving Schools',
+      'E-Commerce', 'Education', 'Events', 'Funeral', 'HR', 'Healthcare',
+      'Hotels', 'HVAC', 'Laundries', 'Law Firms', 'Legaltech',
+      'Manufacturing', 'Medical', 'Moving', 'Music Schools', 'Nonprofits',
+      'Outpatient Therapy', 'Pest Control', 'Pharma', 'Photography',
+      'Property', 'Property Mgmt', 'Real Estate', 'Restaurants', 'Roofing',
+      'Salons', 'Security', 'Self-Storage', 'Specialty Retail',
+      'Tech GTM', 'Theater', 'Veterinary', 'Water Damage', 'Women'
+    ];
+
     // Normalize categories inside data
     function getCleanCategory(industryName) {
       const lower = industryName.toLowerCase();
-      if (lower.includes('accounting')) return 'Accounting';
-      if (lower.includes('hvac')) return 'HVAC';
-      if (lower.includes('coaching')) return 'Coaching';
-      if (lower.includes('education')) return 'Education';
-      if (lower.includes('hr')) return 'HR';
-      if (lower.includes('healthcare')) return 'Healthcare';
-      if (lower.includes('theater')) return 'Theater';
-      if (lower.includes('appraisal') || lower.includes('property')) return 'Property';
+      if (lower.includes('accounting') || lower.includes('cpa')) return 'Accounting';
+      if (lower.includes('ai education') || lower.includes('ai training')) return 'AI Education';
+      if (lower.includes('adult education') || lower.includes('nonprofit training')) return 'Adult Education';
+      if (lower.includes('automation reliability')) return 'Automation';
+      if (lower.includes('childcare') || lower.includes('daycare')) return 'Childcare';
       if (lower.includes('chiropractic')) return 'Chiropractic';
-      if (lower.includes('women')) return 'Women';
+      if (lower.includes('church') || lower.includes('faith')) return 'Churches';
+      if (lower.includes('cleaning')) return 'Cleaning';
+      if (lower.includes('coaching')) return 'Coaching';
+      if (lower.includes('construction') || lower.includes('plumbing')) return 'Construction';
+      if (lower.includes('coworking') || lower.includes('flex space')) return 'Coworking';
+      if (lower.includes('dental')) return 'Dental';
+      if (lower.includes('driving school')) return 'Driving Schools';
+      if (lower.includes('e-commerce') || lower.includes('ecommerce')) return 'E-Commerce';
+      if (lower.includes('education') && !lower.includes('adult') && !lower.includes('ai')) return 'Education';
+      if (lower.includes('event') || lower.includes('wedding')) return 'Events';
+      if (lower.includes('funeral')) return 'Funeral';
+      if (lower.startsWith('hr') || lower.includes('hr (')) return 'HR';
+      if (lower.includes('healthcare revenue')) return 'Healthcare';
       if (lower.includes('hotel')) return 'Hotels';
-      if (lower.includes('pharma') || lower.includes('pharmaceutical')) return 'Pharma';
+      if (lower.includes('hvac')) return 'HVAC';
+      if (lower.includes('laundry') || lower.includes('laundries')) return 'Laundries';
+      if (lower.includes('law firm')) return 'Law Firms';
+      if (lower.includes('legal') || lower.includes('legaltech')) return 'Legaltech';
+      if (lower.includes('manufacturing') || lower.includes('job shop')) return 'Manufacturing';
+      if (lower.includes('medical clinic')) return 'Medical';
+      if (lower.includes('moving') || lower.includes('storage companies')) return 'Moving';
+      if (lower.includes('music') || lower.includes('arts school')) return 'Music Schools';
+      if (lower.includes('nonprofit') || lower.includes('membership org')) return 'Nonprofits';
+      if (lower.includes('outpatient') || lower.includes('therapy clinic')) return 'Outpatient Therapy';
+      if (lower.includes('pest control')) return 'Pest Control';
+      if (lower.includes('pharma') || lower.includes('pharmaceutical') || (lower.includes('independen') && lower.includes('pharmac'))) return 'Pharma';
+      if (lower.includes('photography') || lower.includes('video studio')) return 'Photography';
+      if (lower.includes('appraisal')) return 'Property';
+      if (lower.includes('property management') || lower.includes('residential property')) return 'Property Mgmt';
+      if (lower.includes('real estate')) return 'Real Estate';
+      if (lower.includes('restaurant') || lower.includes('food service')) return 'Restaurants';
+      if (lower.includes('roofing')) return 'Roofing';
+      if (lower.includes('salon') || lower.includes('spa')) return 'Salons';
+      if (lower.includes('security') || lower.includes('alarm')) return 'Security';
+      if (lower.includes('self-storage') || lower.includes('self storage')) return 'Self-Storage';
+      if (lower.includes('specialty retail')) return 'Specialty Retail';
+      if (lower.includes('tech') || lower.includes('gtm') || lower.includes('software')) return 'Tech GTM';
+      if (lower.includes('theater')) return 'Theater';
+      if (lower.includes('veterinary') || lower.includes('vet clinic')) return 'Veterinary';
+      if (lower.includes('water damage') || lower.includes('remodeling')) return 'Water Damage';
+      if (lower.includes('women')) return 'Women';
       return 'General';
     }
 

@@ -1,6 +1,4 @@
-import { Industry } from "../types";
-
-export const INDUSTRIES: Industry[] = [
+[
   {
     "id": "accounting",
     "name": "Accounting / CPA Firms",
@@ -8386,4 +8384,4 @@ export const INDUSTRIES: Industry[] = [
       }
     ]
   }
-];
+]

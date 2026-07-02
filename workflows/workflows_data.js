@@ -1,5 +1,76 @@
 const WORKFLOWS_DATA = [
   {
+    "industry": "Auto Repair Shops",
+    "name": "AI Voice Bot Outreach & Booking",
+    "description": "Monitors the shop's Tekmetric/Shop-Ware database nightly for customers approaching service intervals, initiates Vapi.ai outbound calls from a local number, classifies customer intent in real time, books appointments directly into the shop management system, sends SMS confirmations, and triggers a post-repair review and reactivation sequence automatically.",
+    "integrations": [
+      "VAPI_API_KEY",
+      "TWILIO_ACCOUNT_SID",
+      "TWILIO_AUTH_TOKEN",
+      "TWILIO_FROM_NUMBER",
+      "ANTHROPIC_API_KEY",
+      "AIRTABLE_API_KEY",
+      "AIRTABLE_BASE_ID"
+    ],
+    "nodes": [
+      { "name": "Schedule Trigger: Nightly", "type": "n8n-nodes-base.scheduleTrigger" },
+      { "name": "HTTP Request: Query Tekmetric for Due Customers", "type": "n8n-nodes-base.httpRequest" },
+      { "name": "Code: Build Outreach List", "type": "n8n-nodes-base.code" },
+      { "name": "Split In Batches", "type": "n8n-nodes-base.splitInBatches" },
+      { "name": "HTTP Request: Vapi.ai Outbound Call", "type": "n8n-nodes-base.httpRequest" },
+      { "name": "Airtable: Log Outreach Attempt", "type": "n8n-nodes-base.airtable" },
+      { "name": "Webhook: Vapi Callback Handler", "type": "n8n-nodes-base.webhook" },
+      { "name": "Claude: Classify Intent", "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi" },
+      { "name": "IF: Outcome Branch", "type": "n8n-nodes-base.if" },
+      { "name": "HTTP Request: Book in Tekmetric", "type": "n8n-nodes-base.httpRequest" },
+      { "name": "Twilio: SMS Confirmation", "type": "n8n-nodes-base.httpRequest" },
+      { "name": "Webhook: After-Hours Missed Call", "type": "n8n-nodes-base.webhook" },
+      { "name": "Twilio: Recovery SMS (2 min)", "type": "n8n-nodes-base.httpRequest" },
+      { "name": "Webhook: Repair Complete", "type": "n8n-nodes-base.webhook" },
+      { "name": "Twilio: Thank-You SMS", "type": "n8n-nodes-base.httpRequest" },
+      { "name": "Wait: 24 Hours", "type": "n8n-nodes-base.wait" },
+      { "name": "Twilio: Google Review Request", "type": "n8n-nodes-base.httpRequest" },
+      { "name": "Wait: 90 Days", "type": "n8n-nodes-base.wait" },
+      { "name": "Claude: Personalized Check-In", "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi" },
+      { "name": "Twilio: Send Check-In SMS", "type": "n8n-nodes-base.httpRequest" }
+    ],
+    "ai_tasks": "- Classify inbound call transcript: outcome (booked/interested/declined/no_answer/urgent), symptoms, urgency score 1–10\n- Generate personalized 90-day maintenance check-in SMS based on vehicle, services performed, and customer name",
+    "python_tools": "- None required — all steps handled in n8n\n- Optional: `twilio_sms.py` for bulk SMS testing outside n8n",
+    "code_app": "Not required for this workflow. Optional: a shop dashboard showing daily outreach stats, appointments booked, and review count reading from Airtable.",
+    "test_plan": "1. Seed Airtable with a test customer record (vehicle with oil change due)\n2. Trigger nightly schedule manually — verify outreach list builds correctly\n3. Confirm Vapi call fires to test number with correct vehicle details in script\n4. Simulate booked outcome via webhook → verify Tekmetric appointment created + confirmation SMS received\n5. Simulate no_answer → verify follow-up SMS fires within 30 min\n6. POST a test repair-complete webhook → verify thank-you SMS, 24h review request, and 90d check-in queued\n7. Test after-hours missed call → verify recovery SMS within 2 minutes",
+    "problem_subheader": "Auto shops lose 30–50% of revenue to voicemail and missed callbacks",
+    "problem_description": "When a customer's check engine light comes on at 6 PM, a typical independent shop has already closed — the call goes to voicemail, and by 8 AM the customer has booked with a competitor. Meanwhile, shops like Danco Transmission and Jeff's Automobile Repair have hundreds of past customers who would return for oil changes or brake inspections if someone just reached out — but no one has time to make those calls.",
+    "reddit_title": "r/MechanicAdvice - Called 3 shops after hours last night. Only one texted me back. Guess who I booked with.",
+    "reddit_comments": "61 comments",
+    "metrics": [
+      { "label": "Revenue Lost to Missed Calls", "value": "30–50%" },
+      { "label": "Shops with No Online Booking (Fairfield)", "value": "7 of 10" },
+      { "label": "Avg Ohio Repair Job", "value": "$350–$500" }
+    ],
+    "gtm": [
+      {
+        "channel": "Direct Outreach on Dixie Highway",
+        "desc": "Visit the 7 Fairfield shops with no online booking — Danco Transmission, Jeff's Automobile Repair, Mike's Auto Specialist, Relative Auto, Pleasant Run Service Center, Xpress Pro Tire, Fairfield Automotive. Lead with the after-hours recovery demo."
+      },
+      {
+        "channel": "Fairfield Chamber of Commerce",
+        "desc": "Present at monthly member breakfasts: 'How Fairfield Auto Shops Are Using AI to Fill Their Bays in 2026.' Chamber meets at 701 Wessel Dr."
+      },
+      {
+        "channel": "Auto Parts Distributor Referrals",
+        "desc": "Partner with NAPA, O'Reilly, and AutoZone Fairfield — they have relationships with every independent shop on Dixie Hwy and can refer you in exchange for co-marketing."
+      }
+    ],
+    "lead_sources": [
+      "Fairfield Chamber of Commerce (701 Wessel Dr)",
+      "Butler County Small Business Development Center",
+      "Danco Transmission, Jeff's Automobile Repair, Mike's Auto Specialist, Relative Auto, Pleasant Run Service Center, Xpress Pro Tire, Fairfield Automotive",
+      "Nextdoor and Facebook groups: Fairfield OH Community, What's Up Fairfield",
+      "CARFAX Service Network enrolled shops"
+    ],
+    "positioning": "Never Miss Another Repair Call: Our AI Voice Agent answers every inbound call in under 30 seconds, books the appointment, and automatically follows up with your past customers — so your bays stay full even when you're under a car."
+  },
+  {
     "industry": "Accounting / CPA Firms",
     "name": "PO \u2192 P&L Automation",
     "description": "Watches for incoming purchase orders (via Gmail or Google Drive), extracts structured data using Claude, pushes to QuickBooks for invoice creation, and auto-updates a P&L tracking sheet with a Slack notification.",

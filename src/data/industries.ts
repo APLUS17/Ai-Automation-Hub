@@ -2,6 +2,137 @@ import { Industry } from "../types";
 
 export const INDUSTRIES: Industry[] = [
   {
+    "id": "auto-repair",
+    "name": "Auto Repair Shops",
+    "segment": "Industrial, Trades & Field Ops",
+    "keywords": [
+      "auto repair",
+      "mechanic",
+      "oil change",
+      "tekmetric",
+      "voice bot",
+      "automotive",
+      "shop management",
+      "fairfield"
+    ],
+    "partners": [
+      "Auto parts distributors — NAPA, O'Reilly, AutoZone (relationships with every independent shop)",
+      "Local web design agencies serving Butler County (build sites but don't offer automation)",
+      "Butler County insurance agents (refer customers to shops after claims)",
+      "Fairfield City Economic Development Office (connects you with shop owners directly)",
+      "Auto auction and fleet operators near I-75 (need shops with tight scheduling)"
+    ],
+    "builds": [
+      {
+        "label": "AI Receptionist — Missed Call Recovery & Booking",
+        "steps": [
+          { "t": "Webhook: Missed Inbound Call" },
+          { "t": "Twilio: SMS Recovery (< 2 min)" },
+          { "t": "Claude: Classify Customer Intent" },
+          { "t": "IF: Urgent vs. Routine" },
+          { "t": "HTTP Request: Check Tekmetric Calendar" },
+          { "t": "Vapi.ai: Follow-Up Voice Call" },
+          { "t": "IF: Appointment Confirmed" },
+          { "t": "HTTP Request: Book in Tekmetric" },
+          { "t": "Twilio: Booking Confirmation SMS" },
+          { "t": "Airtable: Log Call Outcome" }
+        ],
+        "nodes": [
+          { "name": "Webhook: Missed Inbound Call", "type": "n8n-nodes-base.webhook" },
+          { "name": "Twilio: SMS Recovery (< 2 min)", "type": "n8n-nodes-base.httpRequest" },
+          { "name": "Claude: Classify Customer Intent", "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi" },
+          { "name": "IF: Urgent vs. Routine", "type": "n8n-nodes-base.if" },
+          { "name": "HTTP Request: Check Tekmetric Calendar", "type": "n8n-nodes-base.httpRequest" },
+          { "name": "Vapi.ai: Follow-Up Voice Call", "type": "n8n-nodes-base.httpRequest" },
+          { "name": "IF: Appointment Confirmed", "type": "n8n-nodes-base.if" },
+          { "name": "HTTP Request: Book in Tekmetric", "type": "n8n-nodes-base.httpRequest" },
+          { "name": "Twilio: Booking Confirmation SMS", "type": "n8n-nodes-base.httpRequest" },
+          { "name": "Airtable: Log Call Outcome", "type": "n8n-nodes-base.airtable" }
+        ],
+        "aiTasks": "- Classify the customer's SMS reply: urgency (broken down / won't start = urgent, routine service = standard), intent (book now, get quote, ask question)\n- Draft a natural, conversational follow-up response that matches the customer's issue and offers the next available slot",
+        "testPlan": "1. Simulate a missed call webhook from a test number after hours\n2. Verify recovery SMS arrives within 2 minutes with shop name and reply prompt\n3. Reply 'my brakes are grinding' — confirm Claude classifies as URGENT and follow-up offers next-morning slot\n4. Reply 'need an oil change sometime this week' — confirm ROUTINE classification and 2 time slot options\n5. Confirm appointment on reply → verify Tekmetric booking created and confirmation SMS received\n6. Let a missed call go unreplied for 8h → verify morning staff flag fires in Airtable",
+        "gtm": [
+          {
+            "channel": "After-Hours Demo on Dixie Highway",
+            "desc": "Call one of the 7 shops with no online booking at 6:30 PM and let it go to voicemail. Show them the recording side-by-side with what the AI receptionist would have done instead. Danco Transmission, Jeff's Automobile Repair, Mike's Auto Specialist, Relative Auto, Pleasant Run Service Center, Xpress Pro Tire, Fairfield Automotive."
+          },
+          {
+            "channel": "Fairfield Chamber of Commerce",
+            "desc": "Present at monthly member breakfasts at 701 Wessel Dr: 'How Fairfield Auto Shops Are Answering Every Call in Under 30 Seconds — Without Hiring Anyone.' Butler County SBDC can also connect you with vetted local shop owners."
+          },
+          {
+            "channel": "Auto Parts Distributor Referrals",
+            "desc": "Partner with NAPA, O'Reilly, and AutoZone Fairfield — they have relationships with every independent shop on Dixie Hwy and can refer you in exchange for co-marketing or a rev-share."
+          }
+        ],
+        "problemSubheader": "Every after-hours call that hits voicemail is a booking lost to a competitor",
+        "problemDescription": "When a customer's check engine light comes on at 6 PM, a typical independent shop has already closed — the call goes to voicemail, and by 8 AM the customer has booked with a competitor. 78% of customers go with the first shop that responds. The AI receptionist texts back within 2 minutes, qualifies the issue, pulls the real Tekmetric calendar, and books the appointment — so the shop wakes up to confirmed jobs, not missed calls.",
+        "redditTitle": "r/MechanicAdvice - Called 3 shops after hours last night. Only one texted me back within minutes. Guess who I booked with.",
+        "redditComments": "61 comments",
+        "integrations": [
+          "VAPI_API_KEY",
+          "TWILIO_ACCOUNT_SID",
+          "TWILIO_AUTH_TOKEN",
+          "TWILIO_FROM_NUMBER",
+          "ANTHROPIC_API_KEY",
+          "AIRTABLE_API_KEY",
+          "AIRTABLE_BASE_ID"
+        ]
+      },
+      {
+        "label": "Post-Repair Review & Reactivation",
+        "steps": [
+          { "t": "Webhook: Repair Order Closed" },
+          { "t": "Twilio: Thank-You SMS (Same Day)" },
+          { "t": "Wait: 24 Hours" },
+          { "t": "Twilio: Google Review Request" },
+          { "t": "Wait: 90 Days" },
+          { "t": "Claude: Personalized Check-In" },
+          { "t": "Twilio: Send Check-In SMS" },
+          { "t": "Airtable: Update Customer Record" }
+        ],
+        "nodes": [
+          { "name": "Webhook: Repair Order Closed", "type": "n8n-nodes-base.webhook" },
+          { "name": "Twilio: Thank-You SMS", "type": "n8n-nodes-base.httpRequest" },
+          { "name": "Wait: 24 Hours", "type": "n8n-nodes-base.wait" },
+          { "name": "Twilio: Google Review Request", "type": "n8n-nodes-base.httpRequest" },
+          { "name": "Wait: 90 Days", "type": "n8n-nodes-base.wait" },
+          { "name": "Claude: Personalized Check-In", "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi" },
+          { "name": "Twilio: Send Check-In SMS", "type": "n8n-nodes-base.httpRequest" },
+          { "name": "Airtable: Update Customer Record", "type": "n8n-nodes-base.airtable" }
+        ],
+        "aiTasks": "- Generate a personalized 2-sentence maintenance check-in SMS referencing the specific services performed and the vehicle's make/model — avoiding generic copy that reads like a mass blast",
+        "testPlan": "1. POST a test repair-complete webhook with sample vehicle + service data\n2. Verify thank-you SMS received same day with technician name\n3. Advance wait node to confirm 24h review request SMS fires with correct Google review link\n4. Confirm Airtable record updated with sent_review_request = true\n5. Trigger 90-day check-in manually — verify Claude output is personalized and SMS sends",
+        "gtm": [
+          {
+            "channel": "Shops with High Ratings but Few Reviews",
+            "desc": "Relative Auto (4.9★, 31 reviews) and Mike's Auto Specialist (4.9★, 16 reviews) are leaving massive SEO value on the table. Lead with: 'You have the best shop on Dixie Hwy — but Google can't see you yet.'"
+          },
+          {
+            "channel": "Post-Pilot Upsell",
+            "desc": "Start prospects with just this workflow (no new software, no hardware, plugs into Tekmetric). After they see the review uptick and rebookings in month 1, upsell to the full voice bot outreach system."
+          },
+          {
+            "channel": "CARFAX Service Network",
+            "desc": "Shops enrolled in CARFAX's program are already digitally aware. Approach them with the review + reactivation workflow as the next step in their digital growth."
+          }
+        ],
+        "problemSubheader": "Great shops are invisible on Google because no one asks for reviews",
+        "problemDescription": "Shops with excellent service — like Relative Auto (4.9★) and Mike's Auto Specialist (4.9★) — have fewer than 35 Google reviews combined, making them invisible to new customers searching online. There's no systematic process to collect reviews or re-engage past customers after a visit, so repeat revenue and referral value go untapped.",
+        "redditTitle": "r/AutoMechanic - My shop has 4.9 stars but only 18 reviews. Competitors with worse service rank above me. What am I missing?",
+        "redditComments": "44 comments",
+        "integrations": [
+          "TWILIO_ACCOUNT_SID",
+          "TWILIO_AUTH_TOKEN",
+          "TWILIO_FROM_NUMBER",
+          "ANTHROPIC_API_KEY",
+          "AIRTABLE_API_KEY",
+          "AIRTABLE_BASE_ID"
+        ]
+      }
+    ]
+  },
+  {
     "id": "accounting",
     "name": "Accounting / CPA Firms",
     "segment": "Professional Services",

@@ -319,7 +319,7 @@ I built an automated system specifically for this — it handles everything thro
       {/* Header */}
       <div className="glass-card rounded-2xl p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl shadow-indigo-950/2 dark:shadow-black/10">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 flex items-center justify-center bg-indigo-50/5 dark:bg-zinc-900/60 rounded-2xl border border-neutral-200/50 dark:border-zinc-800/80 shadow-inner">
+          <div className="w-14 h-14 flex items-center justify-center bg-indigo-500/8 dark:bg-zinc-900/60 rounded-2xl border border-neutral-200/70 dark:border-zinc-800/80 shadow-inner">
             <IndustryIcon id={industry.id} className="w-6.5 h-6.5 text-indigo-650 dark:text-indigo-400" />
           </div>
           <div className="text-left">
@@ -408,7 +408,7 @@ I built an automated system specifically for this — it handles everything thro
             </div>
             <ol className="flex flex-col gap-4">
               {build.steps.map((step, idx) => (
-                <li key={idx} className="flex gap-4.5 items-start p-4.5 bg-white/40 dark:bg-zinc-900/30 hover:bg-white/80 dark:hover:bg-zinc-900/60 border border-neutral-200/50 dark:border-zinc-800/60 transition-all rounded-2xl shadow-sm hover:shadow-md">
+                <li key={idx} className="flex gap-4.5 items-start p-4.5 bg-white/60 dark:bg-zinc-900/30 hover:bg-white dark:hover:bg-zinc-900/60 border border-neutral-200/70 dark:border-zinc-800/60 transition-all rounded-2xl shadow-sm hover:shadow-md">
                   <span className="text-xs font-black text-indigo-605 bg-indigo-50/60 dark:text-indigo-400 dark:bg-indigo-950/40 w-7.5 h-7.5 flex items-center justify-center rounded-xl flex-shrink-0 border border-indigo-200/40 dark:border-indigo-500/15 font-mono shadow-inner">
                     {idx + 1}
                   </span>
@@ -480,7 +480,7 @@ I built an automated system specifically for this — it handles everything thro
               </h4>
               <ol className="flex flex-col gap-2.5">
                 {build.nodes.map((node, idx) => (
-                  <li key={idx} className="flex items-center gap-3.5 p-3.5 bg-white/40 dark:bg-zinc-900/30 border border-neutral-200/50 dark:border-zinc-800/60 rounded-2xl shadow-sm">
+                  <li key={idx} className="flex items-center gap-3.5 p-3.5 bg-white/65 dark:bg-zinc-900/30 border border-neutral-200/70 dark:border-zinc-800/60 rounded-2xl shadow-sm">
                     <span className="text-xs font-black text-indigo-605 bg-indigo-50/50 dark:text-indigo-400 dark:bg-indigo-950/40 w-6.5 h-6.5 flex items-center justify-center rounded-xl flex-shrink-0 border border-indigo-200/40 dark:border-indigo-500/15 tabular-nums font-mono shadow-inner">
                       {idx + 1}
                     </span>
@@ -552,8 +552,8 @@ I built an automated system specifically for this — it handles everything thro
                     </span>
                   </div>
                   {Object.values(testPlanChecked).filter(Boolean).length === testPlanSteps.length && testPlanSteps.length > 0 && (
-                    <span className="ml-auto text-[10px] font-black uppercase tracking-widest px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200/40 dark:border-emerald-550/30 rounded-xl font-mono shadow-sm">
-                      ✓ All Verified
+                    <span className="ml-auto flex items-center gap-1 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border border-emerald-200/40 dark:border-emerald-550/30 rounded-xl font-mono shadow-sm">
+                      <CheckCircle className="w-3 h-3" />All Verified
                     </span>
                   )}
                 </div>
@@ -575,8 +575,12 @@ I built an automated system specifically for this — it handles everything thro
                     return (
                       <li
                         key={idx}
+                        role="checkbox"
+                        aria-checked={checked}
+                        tabIndex={0}
                         onClick={() => setTestPlanChecked(prev => ({ ...prev, [idx]: !prev[idx] }))}
-                        className="flex items-start gap-3 p-3 rounded-xl border cursor-pointer select-none transition-all hover:bg-neutral-50/50 dark:hover:bg-zinc-900/30"
+                        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setTestPlanChecked(prev => ({ ...prev, [idx]: !prev[idx] })); }}}
+                        className="flex items-start gap-3 p-3 rounded-xl border cursor-pointer select-none transition-all hover:bg-neutral-50/50 dark:hover:bg-zinc-900/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
                         style={{ borderColor: checked ? "rgb(16 185 129 / 0.3)" : undefined }}
                       >
                         <div className={`w-5 h-5 rounded-md flex items-center justify-center border flex-shrink-0 mt-0.5 transition-all ${
@@ -1012,7 +1016,7 @@ I built an automated system specifically for this — it handles everything thro
           onClick={() => setIsAssistantOpen(true)}
           className="bg-indigo-600 hover:bg-indigo-550 text-white rounded-full px-5 py-4 shadow-2xl flex items-center gap-2 hover:scale-105 active:scale-95 transition-all duration-300 font-bold border border-indigo-400/25 cursor-pointer font-heading"
         >
-          <Sparkles className="w-5 h-5 text-indigo-200 animate-pulse" />
+          <Sparkles className="w-5 h-5 text-indigo-200" />
           <span className="text-xs tracking-wider uppercase font-extrabold">Ask Advisor AI</span>
         </button>
       </div>

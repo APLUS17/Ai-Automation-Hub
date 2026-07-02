@@ -213,7 +213,7 @@ export default function App() {
                   Select <span className="text-indigo-600 dark:text-indigo-400 font-black tracking-wider text-xl md:text-2xl bg-indigo-600/10 dark:bg-indigo-500/10 px-4 py-2 rounded-xl border border-indigo-600/15 dark:border-indigo-500/15 ml-1 inline-block">Target Industry</span>
                 </h1>
                 <p className="text-neutral-600 dark:text-zinc-400 font-medium text-xs md:text-sm mt-4 tracking-wide">
-                  14 industries. 24 n8n workflow builds. Live market research and warm partner discovery powered by Gemini.
+                  15 industries. 26 n8n workflow builds. Live market research and warm partner discovery powered by Gemini.
                 </p>
               </div>
 

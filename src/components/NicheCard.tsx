@@ -25,7 +25,7 @@ export const NicheCard: React.FC<NicheCardProps> = ({ industry, onSelect }) => {
       className="group glass-card hover:border-indigo-500/50 dark:hover:border-indigo-500/50 rounded-2xl p-6 flex flex-col gap-5 cursor-pointer text-left shadow-md hover:shadow-xl hover:shadow-indigo-500/5 dark:hover:shadow-indigo-500/2 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:outline-none transition-all duration-300"
     >
       <div className="flex items-center gap-4">
-        <div className="w-14 h-14 flex items-center justify-center bg-indigo-500/5 dark:bg-zinc-900/60 rounded-2xl border border-neutral-200/60 dark:border-zinc-800/80 group-hover:border-indigo-500/40 group-hover:bg-indigo-500/10 transition-all duration-300 shadow-inner">
+        <div className="w-14 h-14 flex items-center justify-center bg-indigo-500/8 dark:bg-zinc-900/60 rounded-2xl border border-neutral-200/70 dark:border-zinc-800/80 group-hover:border-indigo-500/40 group-hover:bg-indigo-500/12 transition-all duration-300 shadow-inner">
           <IndustryIcon id={industry.id} className="w-6.5 h-6.5 text-indigo-650 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-350" />
         </div>
         <div>
@@ -42,7 +42,7 @@ export const NicheCard: React.FC<NicheCardProps> = ({ industry, onSelect }) => {
         {industry.keywords.slice(0, 3).map((kw) => (
           <span
             key={kw}
-            className="text-xs px-2.5 py-1 rounded-xl bg-neutral-100/60 dark:bg-zinc-900/60 text-neutral-700 dark:text-zinc-300 border border-neutral-200/50 dark:border-zinc-800/60 font-medium"
+            className="text-xs px-2.5 py-1 rounded-xl bg-neutral-100 dark:bg-zinc-900/60 text-neutral-700 dark:text-zinc-300 border border-neutral-200/70 dark:border-zinc-800/60 font-medium"
           >
             {kw}
           </span>

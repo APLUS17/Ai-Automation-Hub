@@ -35,7 +35,8 @@ import {
   Wifi,
   Package,
   TrendingUp,
-  Dog
+  Dog,
+  Wrench
 } from "lucide-react";
 
 interface IndustryIconProps {
@@ -45,6 +46,9 @@ interface IndustryIconProps {
 
 export const IndustryIcon: React.FC<IndustryIconProps> = ({ id, className = "w-6 h-6" }) => {
   const iconMap: Record<string, React.ComponentType<any>> = {
+    // Auto Repair
+    "auto-repair": Wrench,
+
     // Legacy maps
     "accounting": Calculator,
     "hvac": Thermometer,
